@@ -21,6 +21,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	if *rolls < 1 {
+		fmt.Printf("You wish to \"un-roll\" the di(c)e???\n")
+		os.Exit(1)
+	}
+
 	rollResults := rollDice(*dice, rolls)
 	if *sum {
 		resultSum := 0
