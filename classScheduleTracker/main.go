@@ -1,3 +1,4 @@
+// Need ffmpeg installed on your machine for the alarm to work
 package main
 
 import (
@@ -20,8 +21,8 @@ func main() {
 	viewAll := viewCmd.Bool("a", false, "View the entire day's schedule")
 
 	// Flags for the alarm subcommand
+	alarmSetClip := alarmCmd.String("c", "", "Relative path to the file to use as the alarm audio")
 	alarmNext := alarmCmd.Bool("n", false, "Set an alarm that alerts you 15 minutes before the next scheduled item starts")
-	alarmAll := alarmCmd.Bool("a", false, "Set alarms for all scheduled items for the rest of the day, that alert you 15 minutes before they start")
 
 	if len(os.Args) < 2 {
 		fmt.Println("Expected a subcommand")
@@ -48,7 +49,7 @@ func main() {
 			handleValidationError("Expected either the --next or the --all flag")
 		}
 		alarmCmd.Parse(os.Args[2:])
-		handleAlarm(alarmCmd, alarmNext, alarmAll)
+		handleAlarm(alarmCmd, alarmSetClip, alarmNext)
 
 	default:
 		handleValidationError(

@@ -66,7 +66,7 @@ func handleView(viewCmd *flag.FlagSet, viewNextFlag *bool, viewAllFlag *bool) {
 
 		for _, k := range keys {
 			timeNow := time.Now().Format("1504") // This is a thing: https://stackoverflow.com/a/20234207/17327700
-			if daySchd[k] > timeNow {
+			if k > timeNow {
 				fmt.Printf("%v at %v Hrs\n", daySchd[k], k)
 				return
 			}
