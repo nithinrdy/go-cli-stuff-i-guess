@@ -21,7 +21,7 @@ func main() {
 	viewAll := viewCmd.Bool("a", false, "View the entire day's schedule")
 
 	// Flags for the alarm subcommand
-	alarmSetClip := alarmCmd.String("c", "", "Relative path to the file to use as the alarm audio")
+	alarmSetClip := alarmCmd.String("f", "", "Relative path to the file to use as the alarm audio")
 	alarmNext := alarmCmd.Bool("n", false, "Set an alarm that alerts you 15 minutes before the next scheduled item starts")
 
 	if len(os.Args) < 2 {
@@ -32,21 +32,21 @@ func main() {
 	switch os.Args[1] {
 	case SUBCOMMAND_REGISTER:
 		if len(os.Args) < 3 {
-			handleValidationError("Expected a filepath, or the --template flag")
+			handleValidationError("Expected either the -f (filepath) flag and a file path, or the -t (template) flag")
 		}
 		registerCmd.Parse(os.Args[2:])
 		handleRegister(registerCmd, registerSchedule, registerTemplate)
 
 	case SUBCOMMAND_VIEW:
 		if len(os.Args) < 3 {
-			handleValidationError("Expected either the --next or the --all flag")
+			handleValidationError("Expected either the -n (next) or the -a (all) flag")
 		}
 		viewCmd.Parse(os.Args[2:])
 		handleView(viewCmd, viewNext, viewAll)
 
 	case SUBCOMMAND_ALARM:
 		if len(os.Args) < 3 {
-			handleValidationError("Expected either the --next or the --all flag")
+			handleValidationError("Expected either the -f (filepath) flag and a file path, or the -n (next) flag")
 		}
 		alarmCmd.Parse(os.Args[2:])
 		handleAlarm(alarmCmd, alarmSetClip, alarmNext)

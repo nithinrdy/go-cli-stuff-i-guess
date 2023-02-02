@@ -93,6 +93,18 @@ func alarmNext(daySchedule dayStructure, keys []string) {
 	alarmClipPath, err1 := os.ReadFile(filepath.Join(build.Default.GOPATH, "config", "classScheduleTracker", "alarmClip.txt"))
 	handleError(err1)
 
+	if os.IsNotExist(err1) {
+		fmt.Println("No alarm clip set. Use the -f flag along with an audio clip's filepath to set one.")
+		return
+	}
+
+	// Check if the path in alarmClip.txt is valid
+	_, err2 := os.Stat(string(alarmClipPath))
+	if os.IsNotExist(err2) {
+		fmt.Println("The path to the alarm clip is invalid (the file may have been moved/deleted/renamed). Use the -f flag to set a new one.")
+		return
+	}
+
 	timeOfNextItem, err2 := time.Parse("1504", nextItemTime)
 	handleError(err2)
 	timeNowOnJan1, err3 := time.Parse("1504", time.Now().Format("1504"))
