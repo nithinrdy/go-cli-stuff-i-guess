@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"go/build"
 	"os"
 	"path/filepath"
 	"sort"
@@ -15,7 +16,7 @@ func handleAlarm(alarmCmd *flag.FlagSet, alarmSetClip *string, alarmNextFlag *bo
 		alarmSet(*alarmSetClip)
 		return
 	}
-	filebytes, err := os.ReadFile("./schedule.json")
+	filebytes, err := os.ReadFile(filepath.Join(build.Default.GOPATH, "config", "classScheduleTracker", "schedule.json"))
 	handleError(err)
 
 	var schd schedule // Type defined in view.go
@@ -61,8 +62,14 @@ func alarmSet(clipPath string) {
 	handleError(err)
 
 	// Store the path to the clip in a text file
-	err2 := os.WriteFile("./alarmClip.txt", []byte(filepath.Join(cwd, clipPath)), 0644)
+	err2 := os.MkdirAll(filepath.Join(build.Default.GOPATH, "config", "classScheduleTracker"), 0755)
 	handleError(err2)
+
+	err3 := os.WriteFile(
+		filepath.Join(
+			build.Default.GOPATH, "config", "classScheduleTracker", "alarmClip.txt"),
+		[]byte(filepath.Join(cwd, clipPath)), 0644)
+	handleError(err3)
 }
 
 func alarmNext(daySchedule dayStructure, keys []string) {
@@ -83,7 +90,7 @@ func alarmNext(daySchedule dayStructure, keys []string) {
 	}
 
 	// Get the path to the alarm clip
-	alarmClipPath, err1 := os.ReadFile("./alarmClip.txt")
+	alarmClipPath, err1 := os.ReadFile(filepath.Join(build.Default.GOPATH, "config", "classScheduleTracker", "alarmClip.txt"))
 	handleError(err1)
 
 	timeOfNextItem, err2 := time.Parse("1504", nextItemTime)

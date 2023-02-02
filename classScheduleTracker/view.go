@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"go/build"
 	"os"
+	"path/filepath"
 	"sort"
 	"time"
 )
@@ -22,7 +24,8 @@ type schedule struct {
 }
 
 func handleView(viewCmd *flag.FlagSet, viewNextFlag *bool, viewAllFlag *bool) {
-	filebytes, err := os.ReadFile("./schedule.json")
+	filebytes, err := os.ReadFile(
+		filepath.Join(build.Default.GOPATH, "config", "classScheduleTracker", "schedule.json"))
 	handleError(err)
 
 	var schd schedule
