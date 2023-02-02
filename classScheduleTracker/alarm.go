@@ -93,6 +93,11 @@ func alarmNext(daySchedule dayStructure, keys []string) {
 
 	timeDuration := timeOfNextItem.Sub(timeNowOnJan1).Seconds() - 900 // 900 seconds = 15 minutes
 
+	if timeDuration < 0 {
+		fmt.Println("The next item on your schedule is in less than 15 minutes. Better get a move on!")
+		return
+	}
+
 	// As mentioned in main.go, need ffmpeg installed for this to work
 	process, err4 := os.StartProcess(
 		"/bin/sh",
